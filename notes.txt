@@ -1,0 +1,139 @@
+First
+P→ int, real, trunc, float, id, read, write, if, while, e
+SL → int, real, trunc, float, id, read, write, if, while, e
+S→ int, real, trunc, float, id, read, write, if, while
+TP → int, real, e
+C → (, id, i_num, r_num
+E → (, id, i_num, r_num
+TT → +, -,  e
+T → (, id, i_num, r_num
+FT → *, /
+F → (, id, i_num, r_num
+RO → ==, <>, <, >, <=, >=
+AO → +, -
+MO → *, /
+
+
+Follow:
+P → $$
+SL → end, $$
+S → ;
+TP → id, 
+C → then, do
+E → ;, ==, <>, <, >, <=, >=, )
+TT→ ;, ==, <>, <, >, <=, >=, )
+T→  +, -,  e
+FT →  +, -,  e
+F → *, /
+RO →  (, id, i_num, r_num
+AO → (, id, i_num, r_num
+MO → (, id, i_num, r_num
+
+
+P	→ 	SL $$
+SL	→ 	S SL  |  ε
+S	→ 	id := E  |  read id  |  write E  |  if C SL end  |  while C SL end
+C	→ 	E ro E
+E	→ 	T TT
+T	→ 	F FT
+F	→ 	( E )  |  id  |  lit
+TT	→ 	ao T TT  |  ε
+FT	→ 	mo F FT  |  ε
+ro	→ 	=  |  <>  |  <  |  >  |  <=  |  >=
+ao	→ 	+  |  -
+mo	→ 	*  |  /
+
+
+P	→ 	SL  $$
+SL	→ 	S ; SL  |  ε
+S	→ 	int id := E  |  real id := E  |  trunc ( E )  |  float ( E )
+ |  id := E  |  read TP id  |  write E  |  if C then SL end  |  while C do SL end
+TP	→ 	int  |  real  |  ε
+C	→ 	E  RO  E
+E	→ 	T  TT
+TT	→ 	AO  T  TT  |  ε
+T	→ 	F  FT
+FT	→ 	MO  F  FT  |  ε
+F	→ 	( E )  |  id  |  i_num  |  r_num
+RO	→ 	==  |  <>  |  <  |  >  |  <=  |  >=
+AO	→ 	+  |  -
+MO	→ 	*  |  /
+
+
+first sets:
+P: int , real , id , read , write , if , while ,ε 
+SL: int , real , id , read , write , if , while , ε
+S: int , real , id , read , write , if , while, ε
+TP: int , real , ε
+C: (, id, i_num, r_num, trunc, float, ε 
+E: (, id, i_num, r_num, trunc, float, ε
+TT: +, -, ε
+T: (, id, i_num, r_num, trunc, float, ε
+FT: *, /, ε
+F: (, id, i_num, r_num, trunc, float, ε
+RO: ==, <>, <, >, <=, >=
+AO: +, -
+MO: *, /
+
+Follow sets:
+P: $$
+SL: $$, end
+S: ;
+TP: id
+C: then, do
+E: ), First(RO) , Follow(S), Follow(C) => ), ==, <>, <, >, <=, >=, ;, then, do
+TT: Follow(E) => ), ==, <>, <, >, <=, >=, ;, then, do
+T: First(TT), Follow(E) =>  +, -, ), ==, <>, <, >, <=, >=, ;, then, do
+FT: Follow(T) =>  +, -, *, /, ), ==, <>, <, >, <=, >=, ;, then, do
+F: First(FT), Follow(T) =>  *, /, +, -, ), ==, <>, <, >, <=, >=, ;, then, do
+RO: First(E) => (, id, i_num, r_num, trunc, float, ε
+AO: First(T) => (, id, i_num, r_num, trunc, float, ε
+MO: First(F) => (, id, i_num, r_num, trunc, float, ε
+
+first sets:
+ P: int , real , id , read , write , if , while ,ε 
+ SL: int , real , id , read , write , if , while , ε
+ S: int , real , id , read , write , if , while, ε
+TP: int , real , ε
+ C: (, id, i_num, r_num, trunc, float, ε 
+ E: (, id, i_num, r_num, trunc, float, ε
+TT: +, -, ε
+ T: (, id, i_num, r_num, trunc, float, ε
+FT: *, /, ε
+ F: (, id, i_num, r_num, trunc, float, ε
+RO: ==, <>, <, >, <=, >=
+AO: +, -
+MO: *, /
+
+Follow sets:
+P: $$
+SL: $$, end
+S: ;
+TP: id
+C: then, do
+E: ), First(RO) , Follow(S), Follow(C) => ), ==, <>, <, >, <=, >=, ;, then, do
+TT: Follow(E) => ), ==, <>, <, >, <=, >=, ;, then, do
+T: First(TT), Follow(E) =>  +, -, ), ==, <>, <, >, <=, >=, ;, then, do
+FT: Follow(T) =>  +, -, *, /, ), ==, <>, <, >, <=, >=, ;, then, do
+F: First(FT), Follow(T) =>  *, /, +, -, ), ==, <>, <, >, <=, >=, ;, then, do
+RO: First(E) => (, id, i_num, r_num, trunc, float, ε
+AO: First(T) => (, id, i_num, r_num, trunc, float, ε
+MO: First(F) => (, id, i_num, r_num, trunc, float, ε
+
+
+if (! contains(FIRST_S, next_token)){
+            error();
+            while (true)
+            {
+                if (contains(FIRST_S, next_token))
+                {
+                    break;
+                }
+                else if (contains(FOLLOW_S, next_token) || next_token == t_eof)
+                {
+                    return;
+                }
+                else
+                    tie(next_token, token_image) = s.scan();
+            }
+        }

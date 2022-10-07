@@ -1,0 +1,2 @@
+read. read int n 2.l;
+real n := 2.9;
